@@ -1,0 +1,6 @@
+dist/
+node_modules/
+deploy_url.txt
+__pycache__/
+*.pyc
+.env
