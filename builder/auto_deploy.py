@@ -6,8 +6,11 @@ import json
 import subprocess
 import argparse
 
+# Robust path handling
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Re-execute in virtualenv if not already running in it
-venv_python = "/home/team/shared/builder/venv/bin/python"
+venv_python = os.path.join(REPO_ROOT, "builder", "venv", "bin", "python")
 if sys.executable != venv_python and os.path.exists(venv_python):
     os.execv(venv_python, [venv_python] + sys.argv)
 
@@ -20,12 +23,11 @@ except ImportError:
 
 # Helper to run database queries via team-db CLI
 def run_team_db(sql_statement):
-    env = os.environ.copy()
-    env["TMPDIR"] = "/home/agent-site-builder/tmp"
-    cli_path = "/home/agent-site-builder/bin/team-db"
+    # Using relative paths or finding CLI in PATH
+    cli_path = "team-db" 
     
     # Run team-db command
-    result = subprocess.run([cli_path, sql_statement], env=env, capture_output=True, text=True)
+    result = subprocess.run([cli_path, sql_statement], capture_output=True, text=True)
     if result.returncode != 0:
         print(f"[ERROR] team-db query failed: {sql_statement}")
         print(f"Stderr: {result.stderr}")
@@ -147,14 +149,14 @@ def run_pipeline(mock_mode_flag):
         sanitized_name = "".join(c if c.isalnum() else "-" for c in business_name.lower())
         sanitized_name = "-".join(filter(None, sanitized_name.split("-")))
         slug = f"siteforge-demo-{lead_id}-{sanitized_name}"
-        output_dir = f"/home/team/shared/builder/output/{slug}"
+        output_dir = os.path.join(REPO_ROOT, "builder", "output", slug)
         
         print(f"Generating site in local directory: {output_dir}")
         
         # 2. Call generator.py to build the static site files
         cmd = [
             sys.executable,
-            "/home/team/shared/builder/generator.py",
+            os.path.join(REPO_ROOT, "builder", "generator.py"),
             "--name", business_name,
             "--category", lead.get("category") or "Local Business",
             "--address", lead.get("address") or "Local Area",
