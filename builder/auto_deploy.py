@@ -131,14 +131,14 @@ def run_pipeline(mock_mode_flag):
     print("Checking database for new leads...")
     
     # Query leads with status 'new_lead'
-    leads = run_team_db("SELECT id, business_name, address, phone, category, photos FROM leads WHERE status = 'new_lead'")
+    leads = run_team_db("SELECT place_id, business_name, address, phone, category, photos FROM leads WHERE status = 'new_lead'")
     if not leads:
         print("No new leads to process.")
         return
         
     print(f"Found {len(leads)} new lead(s) to process.")
     for lead in leads:
-        lead_id = lead["id"]
+        lead_id = lead["place_id"]
         business_name = lead["business_name"]
         print(f"\n--- Processing Lead #{lead_id}: '{business_name}' ---")
         
@@ -219,7 +219,7 @@ def run_pipeline(mock_mode_flag):
         # 5. Record deployment URL and update status to 'demo_ready'
         if demo_url:
             print(f"Updating database lead #{lead_id} status to 'demo_ready' with demo_url...")
-            sql = f"UPDATE leads SET demo_url = '{demo_url}', status = 'demo_ready', updated_at = datetime('now') WHERE id = {lead_id}"
+            sql = f"UPDATE leads SET demo_url = '{demo_url}', status = 'demo_ready' WHERE place_id = '{lead_id}'"
             run_team_db(sql)
             print(f"Lead #{lead_id} updated successfully!")
 
