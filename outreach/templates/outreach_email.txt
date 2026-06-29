@@ -1,10 +1,10 @@
-Subject: A new website for {{business_name}}
+Subject: A new website for {{ business_name }}
 
 Hi there,
 
-I'm from SiteFlow Automations. We noticed that {{business_name}} doesn't have a website yet, so we took the liberty of building a custom demo for you to show you what's possible.
+I'm from SiteFlow Automations. We noticed that {{ business_name }} doesn't have a website yet, so we took the liberty of building a custom demo for you to show you what's possible.
 
-You can view your demo here: {{demo_url}}
+You can view your demo here: {{ demo_url }}
 
 Our goal is to help local businesses like yours get online and reach more customers with zero effort on your part.
 
